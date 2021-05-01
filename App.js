@@ -1,21 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import {MainScreen} from './src/MainScreen'
 
+
+//попробовать стейты с состоянием переключения жкрана тру/фолс
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+
+  let content = (
+    <View>
+      <Button  title="Continue"/>
+      <Button  title="New Game" onPress ={() => {content = (<MainScreen />)} } />
+      <Button  title="Load"/>
+      <Button  title="Settings"/>
+      <Button  title="Exit"/>
     </View>
+  )
+
+  return (
+    <View>
+      {content}
+    </View>
+    
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+      
+  }
+
+
+
+})
