@@ -1,21 +1,23 @@
 import React, {useState} from 'react'
-import {StyleSheet, View, Text, Button} from 'react-native'
+import {StyleSheet, View, Text, Button, TouchableOpacity} from 'react-native'
 import {story} from './story'
 
 
 
 
-export const MainScreen = () => {
-    let [storyPage, changePage] = useState(0)
+export const MainScreen = ({storyPage, nextPage, gameStop}) => {
+    
     return (
         
         <View style={styles.container}>
+            <TouchableOpacity onPress={nextPage}>
             <View style={styles.text}>
                 <Text style={styles.textStyling}>{story[storyPage].text}</Text>
             </View>
+            </TouchableOpacity>
             <View style={styles.buttons}>
-                <Button  title="Continue" onPress={() => changePage(storyPage++)} />
-                <Button  title="New game" onPress={() => changePage(prev => prev.filter(storyPage))}/>
+                
+                <Button  title="Exit" onPress ={gameStop}/>
             </View>
         </View>
         
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     
     buttons: {
         justifyContent: 'center',
-        paddingTop: 250,
+        paddingTop: 150,
         flexDirection: 'row'
     }
 
