@@ -14,12 +14,13 @@ export const GameScreen = ({storyPage, nextPage, gameStop}) => {
     return (
         
         <View style={styles.container}>
-            <ImageBackground style={styles.images} source={{uri:bgImg()}}>
-                
+            <ImageBackground style={styles.images} source={story[storyPage].bg}>
+            
                 <View style={styles.text} >
+                    
                     <Text  onPress={nextPage} style={styles.textStyling}>{story[storyPage].text}</Text>
                 </View>
-                
+            
                 <View style={styles.buttons}>
                     
                     <Button  title="Exit" onPress ={gameStop}/>
@@ -32,9 +33,7 @@ export const GameScreen = ({storyPage, nextPage, gameStop}) => {
 }
 
 const styles = StyleSheet.create({
-    container:{
-        
-    },
+    
 
     text: {
         
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderColor: 'white',
         borderWidth: 2,
-        backgroundColor: 'black',
+        backgroundColor: 'rgba(52, 52, 52, 0.8)',
         
         
         
@@ -66,7 +65,9 @@ const styles = StyleSheet.create({
     images: {
         width: '100%',
         height: '100%'
-    }
+    },
+
+    
     
 
 })
