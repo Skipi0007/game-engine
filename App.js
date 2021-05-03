@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import {MainScreen} from './src/MainScreen'
-import { story } from './src/story';
+import {GameScreen} from './src/GameScreen'
+import {MainMenu} from './src/MainMenu'
+import { story } from './src/story/story';
 
 
 //попробовать стейты с состоянием переключения жкрана тру/фолс
@@ -12,13 +13,7 @@ export default function App() {
   
 
   let content = (
-    <View>
-      <Button  title="Continue" onPress ={() => setGame(game++)}/>
-      <Button  title="New Game" onPress ={newGame} />
-      <Button  title="Load"/>
-      <Button  title="Settings"/>
-      <Button  title="Exit"/>
-    </View>
+    <MainMenu continueGame={continueGame} newGame={newGame}/>
   )
 
   let gameStop = () => {
@@ -30,6 +25,10 @@ export default function App() {
     changePage(0)
   }
 
+  let continueGame = () => {
+    setGame(game++)
+  }
+
   let newGame = () => {
     changePage(0)
     setGame(game++)
@@ -37,6 +36,7 @@ export default function App() {
 
   let nextPage = () => {
     if (storyPage < Object.keys(story).length){
+      console.log('./story/imges/'+story[storyPage].bg)
       changePage(storyPage++)}
     else {
       gameEnd()
@@ -48,17 +48,12 @@ export default function App() {
   if (game) {
     content = (
       <View>
-        <MainScreen storyPage={storyPage} gameStop={gameStop} nextPage={nextPage}/>
+        <GameScreen storyPage={storyPage} gameStop={gameStop} nextPage={nextPage}/>
       </View>
     )
   } else {
     content = (
-      <View>
-        <Button  title="Continue" onPress ={() => setGame(game++)}/>
-        <Button  title="New Game" onPress ={newGame} />
-        <Button  title="Load"/>
-        <Button  title="Settings"/>
-      </View>
+      <MainMenu continueGame={continueGame} newGame={newGame}/>
     )
   }
 
