@@ -1,15 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import {GameScreen} from './src/GameScreen'
 import {MainMenu} from './src/MainMenu'
 import { story } from './src/story/story';
+import { SaveScreen } from './src/SaveScreen';
 
 
-//попробовать стейты с состоянием переключения жкрана тру/фолс
+
 export default function App() {
   let [storyPage, changePage] = useState(0)
   let [game, setGame] = useState(null)
+  let [saveStart, setSaveStart] = useState(null)
+  let [save, setSave] = useState([
+    {id: '1', title: null},
+    {id: '2', title: null},
+    {id: '3', title: null},
+    {id: '4', title: null},
+    {id: '5', title: null},
+    {id: '6', title: null},
+  ])
+
   
 
   let content = (
@@ -43,17 +54,72 @@ export default function App() {
     }
   }
 
+  const addSave = id => {
+    setSave(prev => [ ...prev,
+      {
+      id: id,
+      title: Date.now().toString()
+      }
+    ])
+  }
+
+  const removeSave = id => {
+    const todo = todos.find(t => t.id === id)
+    Alert.alert(
+    'Delete item',
+    `Are you sure to delete "${todo.title}"?`,
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel'
+      },
+
+      { text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          setTodoId(null),
+          setSave(prev => prev.filter(todo => todo.id !== id))
+        } 
+      }
+    ],
+    { cancelable: false }
+  );
+    
+  }
+
+  const updateSave = (id, title) => {
+    setSave(old => old.map(todo => {
+      if (todo.id === id) {
+        todo.title = title
+      }
+      return todo
+    }))
+  }
   
 
-  if (game) {
+  if (game != null) {
     content = (
       <View>
-        <GameScreen storyPage={storyPage} gameStop={gameStop} nextPage={nextPage}/>
+        
+        <GameScreen storyPage={storyPage} gameStop={gameStop} nextPage={nextPage} saveStarter={() => {setSaveStart(saveStart++)}}/>
+        
+                    
+        
+                
       </View>
     )
-  } else {
+  } else if (saveStart != null) {
     content = (
-      <MainMenu continueGame={continueGame} newGame={newGame}/>
+      
+        <SaveScreen onExit={() => {setSaveStart(null)}}/>
+      
+    )
+  } 
+  
+  else {
+    content = (
+      
+      <MainMenu continueGame={continueGame} newGame={newGame} saveStarter={() => {setSaveStart(saveStart++)}}/>
     )
   }
 

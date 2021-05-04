@@ -1,21 +1,25 @@
 import React, {useState} from 'react'
-import {StyleSheet, View, Text, Button, TouchableOpacity, ImageBackground} from 'react-native'
+import {StyleSheet, View, Text, Button, TouchableOpacity, ImageBackground, Modal} from 'react-native'
 import {story} from './story/story'
+import {ModalMenu} from './ModalMenu'
 
 
 
 
-export const GameScreen = ({storyPage, nextPage, gameStop}) => {
+export const GameScreen = ({storyPage, nextPage, gameStop, saveStarter}) => {
 
-    let bgImg = () => {
-        return(toString('./story/imges/'+story[storyPage].bg))
+    let [visiblity, setVisiblity] = useState(false)
+
+    let onCancel = () => {
+        setVisiblity(false)
     }
     
     return (
         
-        <View style={styles.container}>
-            <ImageBackground style={styles.images} source={story[storyPage].bg}>
+        <View style={styles.container} onCancel={onCancel}>
             
+            <ImageBackground style={styles.images} source={story[storyPage].bg}>
+                <ModalMenu visiblity={visiblity} gameStop={gameStop} onCancel={onCancel} saveStarter={saveStarter}/>
                 <View style={styles.text} >
                     
                     <Text  onPress={nextPage} style={styles.textStyling}>{story[storyPage].text}</Text>
@@ -23,7 +27,7 @@ export const GameScreen = ({storyPage, nextPage, gameStop}) => {
             
                 <View style={styles.buttons}>
                     
-                    <Button  title="Exit" onPress ={gameStop}/>
+                    <Button  title="Menu" onPress ={()=>{setVisiblity(true)}}/>
                 </View>
             </ImageBackground>
         </View>
