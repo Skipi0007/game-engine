@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import {GameScreen} from './src/GameScreen'
 import {MainMenu} from './src/MainMenu'
 import { story } from './src/story/story';
+import {flowOne} from './src/story/flowOne'
 import { SaveScreen } from './src/SaveScreen';
 
 
@@ -13,12 +14,12 @@ export default function App() {
   let [game, setGame] = useState(null)
   let [saveStart, setSaveStart] = useState(null)
   let [save, setSave] = useState([
-    {id: '1', title: null},
-    {id: '2', title: null},
-    {id: '3', title: null},
-    {id: '4', title: null},
-    {id: '5', title: null},
-    {id: '6', title: null},
+    {id: '1', screenNum:null, title: '1'},
+    {id: '2', screenNum:null, title: '2'},
+    {id: '3', screenNum:null, title: '3'},
+    {id: '4', screenNum:null, title: '4'},
+    {id: '5', screenNum:null, title: '5'},
+    {id: '6', screenNum:null, title: '6'},
   ])
 
   
@@ -47,17 +48,18 @@ export default function App() {
 
   let nextPage = () => {
     if (storyPage < Object.keys(story).length){
-      console.log('./story/imges/'+story[storyPage].bg)
+      
       changePage(storyPage++)}
     else {
       gameEnd()
     }
   }
 
-  const addSave = id => {
+  const addSave = (id, screenNum) => {
     setSave(prev => [ ...prev,
       {
       id: id,
+      screenNum: screenNum,
       title: Date.now().toString()
       }
     ])
@@ -77,7 +79,7 @@ export default function App() {
       { text: 'Delete',
         style: 'destructive',
         onPress: () => {
-          setTodoId(null),
+          
           setSave(prev => prev.filter(todo => todo.id !== id))
         } 
       }
@@ -101,7 +103,7 @@ export default function App() {
     content = (
       <View>
         
-        <GameScreen storyPage={storyPage} gameStop={gameStop} nextPage={nextPage} saveStarter={() => {setSaveStart(saveStart++)}}/>
+        <GameScreen startNewFlow={() => {changePage(0)}} save={save} storyPage={storyPage} gameStop={gameStop} nextPage={nextPage} saveStarter={() => {setSaveStart(saveStart++)}}/>
         
                     
         
@@ -111,7 +113,7 @@ export default function App() {
   } else if (saveStart != null) {
     content = (
       
-        <SaveScreen onExit={() => {setSaveStart(null)}}/>
+        <SaveScreen onExit={() => {setSaveStart(null)}} addSave={addSave} storyPage={storyPage} save={save}/>
       
     )
   } 

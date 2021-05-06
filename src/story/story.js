@@ -18,6 +18,11 @@ export const story = [
         id: 3,
         text: "The end",
         bg: require('./imges/textBg4.jpg')
+    },
+    {
+        id:4,
+        choices: [{name: 'Dont answer', key: 0}, {name: 'Bratan prosnis, ti obosralsya', key: 1} ],
+        
     }
     
 ]
