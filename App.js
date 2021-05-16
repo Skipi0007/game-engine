@@ -15,7 +15,14 @@ export default function App() {
   let [currentFlow, setCurrentFlow] = useState(0)
   let [game, setGame] = useState(null)
   let [saveStart, setSaveStart] = useState(null)
-  
+  let [save, setSave] = useState([
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null}
+])
 
   
 
@@ -69,7 +76,7 @@ export default function App() {
   } else if (saveStart != null) {
     content = (
       
-        <SaveScreen game={game} changePage={changePage} currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} setGame={setGame} onExit={() => {setSaveStart(null)}} storyPage={storyPage} />
+        <SaveScreen save={save} setSave={setSave} game={game} changePage={changePage} currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} setGame={setGame} onExit={() => {setSaveStart(null)}} storyPage={storyPage} />
       
     )
   } 

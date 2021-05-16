@@ -1,16 +1,9 @@
 import React, {useState} from 'react'
 import {StyleSheet, Text, Button, View, TouchableOpacity} from 'react-native'
 
-export const SaveScreen = ({onExit, storyPage, setCurrentFlow, currentFlow, changePage, setGame, game }) => {
+export const SaveScreen = ({save, setSave, onExit, storyPage, setCurrentFlow, currentFlow, changePage, setGame, game }) => {
     
-    let [save, setSave] = useState([
-        {flowNum: null, screenNum:null},
-        {flowNum: null, screenNum:null},
-        {flowNum: null, screenNum:null},
-        {flowNum: null, screenNum:null},
-        {flowNum: null, screenNum:null},
-        {flowNum: null, screenNum:null}
-    ])
+    
 
     let saver = (cell, screen, flow) => {
         return (

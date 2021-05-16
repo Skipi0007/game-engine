@@ -9,7 +9,7 @@ export const ModalMenu =({  visiblity, onCancel, gameStop, saveStarter, setSaveS
             <View>
                 
                     <Button title='Continue' onPress={onCancel}></Button>
-                    <Button title='Save / Load' onPress = {saveStarter}></Button>
+                    <Button title='Save / Load' onPress = {()=>{saveStarter(), gameStop()}}></Button>
                     <Button title='Main menu' onPress={gameStop}></Button>
                 
             </View>
