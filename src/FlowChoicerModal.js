@@ -3,23 +3,17 @@ import {StyleSheet, View, TextInput, Button, Modal, TouchableOpacity, Text} from
 
 
 export const FlowChoicerModal =({ choices, gameStop, startNewFlow }) => {
-
-   
-
-    
+  
     return (
-        <Modal visible={true} transparent={false}>
+        <Modal visible={true} transparent={true}>
             <View>
                 <TouchableOpacity>
                     
                     
-                    <Button title='Otval pizdi' onPress={gameStop}></Button>
-                    <Button title='Otval pizdi' onPress={gameStop}></Button>
-                    <Button title='Otval pizdi' onPress={gameStop}></Button>
-                    <Button title='Otval pizdi' onPress={gameStop}></Button>
+                    
                     { choices.map(item => (
                         <View key={item.key}>
-                            <Text onPress={() => startNewFlow(item.key)}>{item.name}</Text>
+                            <Text style={styles.buttons} onPress={() => startNewFlow(item.key)}>{item.name}</Text>
                         </View>
                     )) }
                 </TouchableOpacity>
@@ -31,6 +25,9 @@ export const FlowChoicerModal =({ choices, gameStop, startNewFlow }) => {
 const styles = StyleSheet.create({
     
     buttons: {
-        
+        marginTop: "3%",
+        marginBottom: "3%",
+        fontSize: 22,
+        color: '#1E90FF'
     }
 })
