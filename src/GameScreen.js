@@ -7,11 +7,11 @@ import {SaveScreen} from './SaveScreen'
 import {FlowChoicerModal} from './FlowChoicerModal'
 import { Audio } from 'expo-av';
 
-export const GameScreen = ({startNewFlow, storyPage, nextPage, gameStop, saveStarter, save}) => {
+export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage, nextPage, gameStop, saveStarter}) => {
 
     let [visiblity, setVisiblity] = useState(false)
     let [saveScreen, setSaveScreen] = useState(null)
-    let [currentFlow, setCurrentFlow] = useState(0)
+    
     let [storyFile, setStoryFile] = useState(
         [story, flowOne]
     )
@@ -19,38 +19,38 @@ export const GameScreen = ({startNewFlow, storyPage, nextPage, gameStop, saveSta
 
     
 
-  async function playSound() {
-      let counter = storyPage-1
-      if (storyFile[currentFlow][counter] === undefined) {
-    console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync(
-        storyFile[currentFlow][storyPage].music
-    );
-    setSound(sound);
+//   async function playSound() {
+//       let counter = storyPage-1
+//       if (storyFile[currentFlow][counter] === undefined) {
+//     console.log('Loading Sound');
+//     const { sound } = await Audio.Sound.createAsync(
+//         storyFile[currentFlow][storyPage].music
+//     );
+//     setSound(sound);
 
-    console.log('Playing Sound', storyFile[currentFlow][storyPage].music);
-    await sound.playAsync();}
+//     console.log('Playing Sound', storyFile[currentFlow][storyPage].music);
+//     await sound.playAsync();}
 
-    else if ( storyFile[currentFlow][counter].music != storyFile[currentFlow][storyPage].music ) {
-        console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync(
-        storyFile[currentFlow][storyPage].music
-    );
-    setSound(sound);
+//     else if ( storyFile[currentFlow][counter].music != storyFile[currentFlow][storyPage].music ) {
+//         console.log('Loading Sound');
+//     const { sound } = await Audio.Sound.createAsync(
+//         storyFile[currentFlow][storyPage].music
+//     );
+//     setSound(sound);
 
-    console.log('Playing Sound', storyFile[currentFlow][storyPage].music);
-    await sound.playAsync();}
-    else {}
-    }
+//     console.log('Playing Sound', storyFile[currentFlow][storyPage].music);
+//     await sound.playAsync();}
+//     else {}
+//     }
 
 
-    React.useEffect(() => {
-        return sound
-          ? () => {
-              console.log('Unloading Sound');
-              sound.unloadAsync(); }
-          : undefined;
-      }, [sound]);
+//     React.useEffect(() => {
+//         return sound
+//           ? () => {
+//               console.log('Unloading Sound');
+//               sound.unloadAsync(); }
+//           : undefined;
+//       }, [sound]);
 
   
         
@@ -65,7 +65,7 @@ export const GameScreen = ({startNewFlow, storyPage, nextPage, gameStop, saveSta
     }
 
     let nextSlide = () => {
-            playSound()
+            // playSound()
             nextPage() 
         }
     
@@ -76,18 +76,19 @@ export const GameScreen = ({startNewFlow, storyPage, nextPage, gameStop, saveSta
     
         if (saveScreen != null) {
             setSound(null)
-           content = (<SaveScreen save={save} onExit={()=> {setSaveScreen(null)}}/>)
+           content = (<SaveScreen onExit={()=> {setSaveScreen(null)}}/>)
         }
-        else if (storyFile[currentFlow][storyPage].choices != null) {
-            setSound(null)
-            content = (<FlowChoicerModal startNewFlow={flowChanger} gameStop={gameStop} choices={storyFile[currentFlow][storyPage].choices} />)
-        } 
+        // else 
+        // if (storyFile[currentFlow][storyPage].choices != null) {
+        //     setSound(null)
+        //     content = (<FlowChoicerModal startNewFlow={flowChanger} gameStop={gameStop} choices={storyFile[currentFlow][storyPage].choices} />)
+        // } 
         else {
             
             content = (<View style={styles.container} onCancel={onCancel}>
             
             <ImageBackground style={styles.images} source={story[storyPage].bg}>
-                <ModalMenu  visiblity={visiblity} gameStop={gameStop} onCancel={onCancel} saveStarter={saveStarter} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
+                <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} gameStop={gameStop} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
                 <View style={styles.text} >
                     <Text  onPress={nextSlide} style={styles.textStyling}>{storyFile[currentFlow][storyPage].text}</Text>
                     

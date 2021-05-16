@@ -12,16 +12,10 @@ import { Audio } from 'expo-av';
 
 export default function App() {
   let [storyPage, changePage] = useState(0)
+  let [currentFlow, setCurrentFlow] = useState(0)
   let [game, setGame] = useState(null)
   let [saveStart, setSaveStart] = useState(null)
-  let [save, setSave] = useState([
-    {id: '1', screenNum:null, title: '1'},
-    {id: '2', screenNum:null, title: '2'},
-    {id: '3', screenNum:null, title: '3'},
-    {id: '4', screenNum:null, title: '4'},
-    {id: '5', screenNum:null, title: '5'},
-    {id: '6', screenNum:null, title: '6'},
-  ])
+  
 
   
 
@@ -56,55 +50,16 @@ export default function App() {
     }
   }
 
-  const addSave = (id, screenNum) => {
-    setSave(prev => [ ...prev,
-      {
-      id: id,
-      screenNum: screenNum,
-      title: Date.now().toString()
-      }
-    ])
-  }
 
-  const removeSave = id => {
-    const todo = todos.find(t => t.id === id)
-    Alert.alert(
-    'Delete item',
-    `Are you sure to delete "${todo.title}"?`,
-    [
-      {
-        text: 'Cancel',
-        style: 'cancel'
-      },
 
-      { text: 'Delete',
-        style: 'destructive',
-        onPress: () => {
-          
-          setSave(prev => prev.filter(todo => todo.id !== id))
-        } 
-      }
-    ],
-    { cancelable: false }
-  );
-    
-  }
-
-  const updateSave = (id, title) => {
-    setSave(old => old.map(todo => {
-      if (todo.id === id) {
-        todo.title = title
-      }
-      return todo
-    }))
-  }
+  
   
 
   if (game != null) {
     content = (
       <View>
         
-        <GameScreen startNewFlow={() => {changePage(0)}} save={save} storyPage={storyPage} gameStop={gameStop} nextPage={nextPage} saveStarter={() => {setSaveStart(saveStart++)}}/>
+        <GameScreen currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} startNewFlow={() => {changePage(0)}} storyPage={storyPage} gameStop={gameStop} nextPage={nextPage} saveStarter={() => {setSaveStart(saveStart++)}}/>
         
                     
         
@@ -114,7 +69,7 @@ export default function App() {
   } else if (saveStart != null) {
     content = (
       
-        <SaveScreen onExit={() => {setSaveStart(null)}} addSave={addSave} storyPage={storyPage} save={save}/>
+        <SaveScreen game={game} changePage={changePage} currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} setGame={setGame} onExit={() => {setSaveStart(null)}} storyPage={storyPage} />
       
     )
   } 
