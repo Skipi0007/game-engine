@@ -13,6 +13,7 @@ export const FlowChoicerModal =({ choices, gameStop, startNewFlow }) => {
                     
                     { choices.map(item => (
                         <View key={item.key}>
+                            
                             <Text style={styles.buttons} onPress={() => startNewFlow(item.key)}>{item.name}</Text>
                         </View>
                     )) }

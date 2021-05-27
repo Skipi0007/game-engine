@@ -89,9 +89,9 @@ export default function App() {
   }
 
   return (
-    <View>
+    
       {content}
-    </View>
+    
     
   );
 }

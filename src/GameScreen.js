@@ -73,16 +73,17 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
     
 
     let content
-    
+
         if (saveScreen != null) {
             setSound(null)
            content = (<SaveScreen onExit={()=> {setSaveScreen(null)}}/>)
         }
-        // else 
-        // if (storyFile[currentFlow][storyPage].choices != null) {
-        //     setSound(null)
-        //     content = (<FlowChoicerModal startNewFlow={flowChanger} gameStop={gameStop} choices={storyFile[currentFlow][storyPage].choices} />)
-        // } 
+        else 
+        if (storyFile[currentFlow][storyPage].choices != null) {
+            setSound(null)
+            content = (<FlowChoicerModal startNewFlow={flowChanger} gameStop={gameStop}
+            choices={storyFile[currentFlow][storyPage].choices} />)
+        } 
         else {
             
             content = (<View style={styles.container} onCancel={onCancel}>
@@ -90,7 +91,9 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
             <ImageBackground style={styles.images} source={story[storyPage].bg}>
                 <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} gameStop={gameStop} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
                 <View style={styles.text} >
-                    <Text  onPress={nextSlide} style={styles.textStyling}>{storyFile[currentFlow][storyPage].text}</Text>
+                    <Text  onPress={nextSlide} style={styles.textStyling}>
+                        {storyFile[currentFlow][storyPage].text}
+                    </Text>
                     
                 </View>
             
@@ -113,12 +116,15 @@ const styles = StyleSheet.create({
     text: {
         
         
-        paddingTop: 20,
+        paddingTop: 0,
         justifyContent: 'center',
         borderColor: 'white',
         borderWidth: 2,
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
         
+        marginLeft: '3%',
+        marginRight: '3%',
+        marginTop: '3%'
         
         
         
@@ -128,12 +134,13 @@ const styles = StyleSheet.create({
         fontSize: 22,
         color: 'white',
         
+        
     },
 
     
     buttons: {
+        
         justifyContent: 'center',
-        paddingBottom: 100,
         flexDirection: 'row'
     },
 
