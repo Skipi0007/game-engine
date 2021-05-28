@@ -27,6 +27,7 @@ export const flowOne = [
     },
     {
         id:4,
+        bg: require('./imges/textBg.jpg'),
         choices: [{name: 'Dont answer', key: 0}, {name: 'Bratan prosnis, ti obosralsya', key: 1} ],
         
     }

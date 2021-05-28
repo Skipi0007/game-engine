@@ -4,7 +4,7 @@ import {story} from './story/story'
 import {flowOne} from './story/flowOne'
 import {ModalMenu} from './ModalMenu'
 import {SaveScreen} from './SaveScreen'
-import {FlowChoicerModal} from './FlowChoicerModal'
+import {FlowChoicer} from './FlowChoicer'
 import { Audio } from 'expo-av';
 
 export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage, nextPage, gameStop, saveStarter}) => {
@@ -80,9 +80,9 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
         }
         else 
         if (storyFile[currentFlow][storyPage].choices != null) {
-            setSound(null)
-            content = (<FlowChoicerModal startNewFlow={flowChanger} gameStop={gameStop}
-            choices={storyFile[currentFlow][storyPage].choices} />)
+            // setSound(null)
+            content = (<FlowChoicer startNewFlow={flowChanger} gameStop={gameStop}
+                storyFile={storyFile} currentFlow={currentFlow} storyPage={storyPage} />)
         } 
         else {
             
@@ -90,8 +90,8 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
             
             <ImageBackground style={styles.images} source={story[storyPage].bg}>
                 <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} gameStop={gameStop} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
-                <View style={styles.text} >
-                    <Text  onPress={nextSlide} style={styles.textStyling}>
+                <View style={styles.textDecoration} >
+                    <Text  onPress={nextSlide} style={styles.text}>
                         {storyFile[currentFlow][storyPage].text}
                     </Text>
                     
@@ -114,7 +114,11 @@ const styles = StyleSheet.create({
     
 
     text: {
-        
+        fontSize: 22,
+        color: 'white', 
+    },
+
+    textDecoration: {
         
         paddingTop: 0,
         justifyContent: 'center',
@@ -124,22 +128,12 @@ const styles = StyleSheet.create({
         
         marginLeft: '3%',
         marginRight: '3%',
-        marginTop: '3%'
-        
-        
-        
-    },
-
-    textStyling: {
-        fontSize: 22,
-        color: 'white',
-        
+        marginTop: '3%'  
         
     },
 
     
     buttons: {
-        
         justifyContent: 'center',
         flexDirection: 'row'
     },

@@ -25,6 +25,8 @@ export const story = [
     },
     {
         id:4,
+        text: 'That shit was werewrivere',
+        bg: require('./imges/textBg2.jpg'),
         choices: [{name: 'Dont answer', key: 0}, {name: 'Bratan prosnis, ti obosralsya', key: 1} ],
         
     }
