@@ -11,7 +11,7 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
 
     let [visiblity, setVisiblity] = useState(false)
     let [saveScreen, setSaveScreen] = useState(null)
-    
+    let [textCounter, setTextCounter] = useState(0)
     let [storyFile, setStoryFile] = useState(
         [story, flowOne]
     )
@@ -64,9 +64,18 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
         setVisiblity(false)
     }
 
+    
+
     let nextSlide = () => {
+        if (Object.keys(storyFile[currentFlow][storyPage].text).length != 0 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length) {
+            setTextCounter(textCounter++)
+            
+        } else {
             // playSound()
             nextPage() 
+            setTextCounter(0)
+        }
+
         }
     
 
@@ -92,7 +101,7 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
                 <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} gameStop={gameStop} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
                 <View style={styles.textDecoration} >
                     <Text  onPress={nextSlide} style={styles.text}>
-                        {storyFile[currentFlow][storyPage].text}
+                        {storyFile[currentFlow][storyPage].text[textCounter]}
                     </Text>
                     
                 </View>
