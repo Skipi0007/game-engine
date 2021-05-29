@@ -7,7 +7,7 @@ import {SaveScreen} from './SaveScreen'
 import {FlowChoicer} from './FlowChoicer'
 import { Audio } from 'expo-av';
 
-export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage, nextPage, gameStop, saveStarter}) => {
+export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage, changePage, setGame, saveStarter}) => {
 
     let [visiblity, setVisiblity] = useState(false)
     let [saveScreen, setSaveScreen] = useState(null)
@@ -71,8 +71,14 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
             setTextCounter(textCounter++)
             
         } else {
+            if (storyPage < Object.keys(story).length){
+      
+                changePage(storyPage=storyPage+1)}
+              else {
+                setGame(null)
+                changePage(0)
+              }
             // playSound()
-            nextPage() 
             setTextCounter(0)
         }
 
@@ -90,7 +96,7 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
         else 
         if (storyFile[currentFlow][storyPage].choices != null) {
             // setSound(null)
-            content = (<FlowChoicer startNewFlow={flowChanger} gameStop={gameStop}
+            content = (<FlowChoicer startNewFlow={flowChanger}
                 storyFile={storyFile} currentFlow={currentFlow} storyPage={storyPage} />)
         } 
         else {
@@ -98,7 +104,7 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
             content = (<View style={styles.container} onCancel={onCancel}>
             
             <ImageBackground style={styles.images} source={story[storyPage].bg}>
-                <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} gameStop={gameStop} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
+                <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
                 <View style={styles.textDecoration} >
                     <Text  onPress={nextSlide} style={styles.text}>
                         {storyFile[currentFlow][storyPage].text[textCounter]}

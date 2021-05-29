@@ -30,15 +30,6 @@ export default function App() {
     <MainMenu continueGame={continueGame} newGame={newGame}/>
   )
 
-  let gameStop = () => {
-    setGame(null)
-  }
-
-  let gameEnd = () => {
-    setGame(null)
-    changePage(0)
-  }
-
   let continueGame = () => {
     setGame(game++)
   }
@@ -46,27 +37,13 @@ export default function App() {
   let newGame = () => {
     changePage(0)
     setGame(game++)
-  }
-
-  let nextPage = () => {
-    if (storyPage < Object.keys(story).length){
-      
-      changePage(storyPage++)}
-    else {
-      gameEnd()
-    }
-  }
-
-
-
-  
-  
+  } 
 
   if (game != null) {
     content = (
       <View>
         
-        <GameScreen currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} startNewFlow={() => {changePage(0)}} storyPage={storyPage} gameStop={gameStop} nextPage={nextPage} saveStarter={() => {setSaveStart(saveStart++)}}/>
+        <GameScreen changePage={changePage} currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} startNewFlow={() => {changePage(0)}} storyPage={storyPage} setGame={setGame} saveStarter={() => {setSaveStart(saveStart++)}}/>
         
                     
         
