@@ -6,7 +6,7 @@ import {ModalMenu} from './ModalMenu'
 import {SaveScreen} from './SaveScreen'
 import { Audio } from 'expo-av';
 
-export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage, changePage, setGame, saveStarter}) => {
+export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPage, changePage, setGame, saveStarter}) => {
 
     let [visiblity, setVisiblity] = useState(false)
     let [saveScreen, setSaveScreen] = useState(null)
@@ -70,18 +70,16 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
             setTextCounter(textCounter++)
             
         } else {
-            if (storyPage < Object.keys(story).length){
-      
+            if (storyPage < Object.keys(storyFile[currentFlow]).length-1){     
                 changePage(storyPage=storyPage+1)}
-              else {
+            else {
                 setGame(null)
                 changePage(0)
               }
             // playSound()
             setTextCounter(0)
         }
-
-        }
+    }
     
 
     
@@ -97,6 +95,7 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
             if (storyFile[currentFlow][storyPage].text != null) {
                 content = (
                     <ImageBackground style={styles.images} source={story[storyPage].bg}>
+                        <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
                         <View style={styles.textDecoration}>                               
                             <Text style={styles.text}>{storyFile[currentFlow][storyPage].text}</Text>
                             <TouchableOpacity>
@@ -105,11 +104,15 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
                                 ))}
                             </TouchableOpacity>
                         </View>
+                        <View style={styles.buttons}>
+                            <Button  title="Menu" onPress ={()=>{setVisiblity(true)}}/>
+                        </View>
                     </ImageBackground>  
                 )
             } else {
                 content = (
                     <ImageBackground style={styles.images} source={story[storyPage].bg}>
+                        <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
                         <View style={styles.textDecoration}>  
                             
                             <TouchableOpacity>
@@ -117,6 +120,9 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
                                     <Text key={item.key} style={styles.flowButtons} onPress={() => flowChanger(item.key)}>{item.name}</Text> 
                                 ))}
                             </TouchableOpacity> 
+                        </View>
+                        <View style={styles.buttons}>
+                            <Button  title="Menu" onPress ={()=>{setVisiblity(true)}}/>
                         </View>
                     </ImageBackground> 
                 )
@@ -139,9 +145,7 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
                 </View>
             </ImageBackground>
             </View>)
-        }
-    
-        
+        }        
     
     return (content)
       
