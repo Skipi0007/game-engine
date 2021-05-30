@@ -30,11 +30,11 @@ export default function App() {
     <MainMenu continueGame={continueGame} newGame={newGame}/>
   )
 
-  let continueGame = () => {
+  const continueGame = () => {
     setGame(game++)
   }
 
-  let newGame = () => {
+  const newGame = () => {
     changePage(0)
     setGame(game++)
   } 

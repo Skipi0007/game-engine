@@ -53,21 +53,21 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
 
   
         
-    let flowChanger = (flowNum) => {
+    const flowChanger = (flowNum) => {
         startNewFlow()
         setCurrentFlow(flowNum)
         
     }
     
-    let onCancel = () => {
+    const onCancel = () => {
         setVisiblity(false)
     }
 
-    
+       
 
-    let nextSlide = () => {
-        if (Object.keys(storyFile[currentFlow][storyPage].text).length != 0 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length) {
-            setTextCounter(textCounter++)
+    const nextSlide = () => {
+        if (Object.keys(storyFile[currentFlow][storyPage].text).length != 1 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length-1) {
+            setTextCounter(textCounter=textCounter+1)
             
         } else {
             if (storyPage < Object.keys(storyFile[currentFlow]).length-1){     
