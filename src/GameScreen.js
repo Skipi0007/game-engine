@@ -4,7 +4,6 @@ import {story} from './story/story'
 import {flowOne} from './story/flowOne'
 import {ModalMenu} from './ModalMenu'
 import {SaveScreen} from './SaveScreen'
-import {FlowChoicer} from './FlowChoicer'
 import { Audio } from 'expo-av';
 
 export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage, changePage, setGame, saveStarter}) => {
@@ -93,13 +92,37 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
             setSound(null)
            content = (<SaveScreen onExit={()=> {setSaveScreen(null)}}/>)
         }
-        else 
-        if (storyFile[currentFlow][storyPage].choices != null) {
+        else if (storyFile[currentFlow][storyPage].choices != null) {
+
+            if (storyFile[currentFlow][storyPage].text != null) {
+                content = (
+                    <ImageBackground style={styles.images} source={story[storyPage].bg}>
+                        <View style={styles.textDecoration}>                               
+                            <Text style={styles.text}>{storyFile[currentFlow][storyPage].text}</Text>
+                            <TouchableOpacity>
+                                {storyFile[currentFlow][storyPage].choices.map(item => (                               
+                                    <Text key={item.key} style={styles.flowButtons} onPress={() => flowChanger(item.key)}>{item.name}</Text> 
+                                ))}
+                            </TouchableOpacity>
+                        </View>
+                    </ImageBackground>  
+                )
+            } else {
+                content = (
+                    <ImageBackground style={styles.images} source={story[storyPage].bg}>
+                        <View style={styles.textDecoration}>  
+                            
+                            <TouchableOpacity>
+                                {storyFile[currentFlow][storyPage].choices.map(item => (                               
+                                    <Text key={item.key} style={styles.flowButtons} onPress={() => flowChanger(item.key)}>{item.name}</Text> 
+                                ))}
+                            </TouchableOpacity> 
+                        </View>
+                    </ImageBackground> 
+                )
+            }
             // setSound(null)
-            content = (<FlowChoicer startNewFlow={flowChanger}
-                storyFile={storyFile} currentFlow={currentFlow} storyPage={storyPage} />)
-        } 
-        else {
+        } else {
             
             content = (<View style={styles.container} onCancel={onCancel}>
             
@@ -108,8 +131,7 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
                 <View style={styles.textDecoration} >
                     <Text  onPress={nextSlide} style={styles.text}>
                         {storyFile[currentFlow][storyPage].text[textCounter]}
-                    </Text>
-                    
+                    </Text>                    
                 </View>
             
                 <View style={styles.buttons}>
@@ -127,14 +149,12 @@ export const GameScreen = ({currentFlow, setCurrentFlow, startNewFlow, storyPage
 
 const styles = StyleSheet.create({
     
-
     text: {
         fontSize: 22,
         color: 'white', 
     },
 
-    textDecoration: {
-        
+    textDecoration: {        
         paddingTop: 0,
         justifyContent: 'center',
         borderColor: 'white',
@@ -158,7 +178,11 @@ const styles = StyleSheet.create({
         height: '100%'
     },
 
-    
+    flowButtons: {
+        marginTop: "3%",
+        fontSize: 22,
+        color: '#1E90FF'
+    },
     
 
 })
