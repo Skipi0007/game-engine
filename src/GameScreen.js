@@ -98,7 +98,8 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
             if (storyFile[currentFlow][storyPage].text != null) {
                 content = (
                     <ImageBackground style={styles.images} source={story[storyPage].bg}>
-                        <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(++saveScreen)}}/>
+                        <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} 
+                        setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(++saveScreen)}}/>
                         <View style={styles.textDecoration}>                               
                             <Text style={styles.text}>{storyFile[currentFlow][storyPage].text}</Text>
                             <TouchableOpacity>
