@@ -31,19 +31,19 @@ export default function App() {
   )
 
   const continueGame = () => {
-    setGame(game++)
+    setGame(++game)
   }
 
   const newGame = () => {
     changePage(0)
-    setGame(game++)
+    setGame(++game)
   } 
 
   if (game != null) {
     content = (
       <View>
         
-        <GameScreen changePage={changePage} currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} startNewFlow={() => {changePage(0)}} storyPage={storyPage} setGame={setGame} saveStarter={() => {setSaveStart(saveStart++)}}/>
+        <GameScreen changePage={changePage} currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} startNewFlow={() => {changePage(0)}} storyPage={storyPage} setGame={setGame} saveStarter={() => {setSaveStart(++saveStart)}}/>
         
                     
         
@@ -61,7 +61,7 @@ export default function App() {
   else {
     content = (
       
-      <MainMenu continueGame={continueGame} newGame={newGame} saveStarter={() => {setSaveStart(saveStart++)}}/>
+      <MainMenu continueGame={continueGame} newGame={newGame} saveStarter={() => {setSaveStart(++saveStart)}}/>
     )
   }
 

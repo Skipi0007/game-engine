@@ -14,42 +14,30 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     let [storyFile, setStoryFile] = useState(
         [story, flowOne]
     )
-    const [sound, setSound] = React.useState();
+    const [sound, setSound] = React.useState(null);
 
     
 
-//   async function playSound() {
-//       let counter = storyPage-1
-//       if (storyFile[currentFlow][counter] === undefined) {
-//     console.log('Loading Sound');
-//     const { sound } = await Audio.Sound.createAsync(
-//         storyFile[currentFlow][storyPage].music
-//     );
-//     setSound(sound);
+  async function playSound() {
+    console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync(
+        storyFile[currentFlow][storyPage].music
+    );
+    setSound(sound);
 
-//     console.log('Playing Sound', storyFile[currentFlow][storyPage].music);
-//     await sound.playAsync();}
+    console.log('Playing Sound', storyFile[currentFlow][storyPage].music);
+    await sound.playAsync();
+    }
+    
+    
 
-//     else if ( storyFile[currentFlow][counter].music != storyFile[currentFlow][storyPage].music ) {
-//         console.log('Loading Sound');
-//     const { sound } = await Audio.Sound.createAsync(
-//         storyFile[currentFlow][storyPage].music
-//     );
-//     setSound(sound);
-
-//     console.log('Playing Sound', storyFile[currentFlow][storyPage].music);
-//     await sound.playAsync();}
-//     else {}
-//     }
-
-
-//     React.useEffect(() => {
-//         return sound
-//           ? () => {
-//               console.log('Unloading Sound');
-//               sound.unloadAsync(); }
-//           : undefined;
-//       }, [sound]);
+    React.useEffect(() => {
+        return sound
+          ? () => {
+              console.log('Unloading Sound');
+              sound.unloadAsync(); }
+          : undefined;
+      }, [sound]);
 
   
         
@@ -62,21 +50,36 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     const onCancel = () => {
         setVisiblity(false)
     }
-
-       
+    
+    const currentSoundCheck = (counter) => {
+        if (storyFile[currentFlow][counter-1].music === undefined)
+        {}       
+        else {if ( storyFile[currentFlow][counter-1].music != storyFile[currentFlow][storyPage].music ) {
+                playSound()
+            }
+            else {}
+        }
+    }   
 
     const nextSlide = () => {
         if (Object.keys(storyFile[currentFlow][storyPage].text).length != 1 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length-1) {
-            setTextCounter(textCounter=textCounter+1)
+            setTextCounter(++textCounter)
             
         } else {
-            if (storyPage < Object.keys(storyFile[currentFlow]).length-1){     
-                changePage(storyPage=storyPage+1)}
+            if (storyPage < Object.keys(storyFile[currentFlow]).length-1){ 
+                let counter=storyPage
+                if (sound != null && storyFile[currentFlow][counter+1].music != storyFile[currentFlow][storyPage].music) {
+                    sound.unloadAsync()
+                }    
+                changePage(++storyPage)
+                counter=storyPage
+                currentSoundCheck(counter)
+            }
             else {
                 setGame(null)
                 changePage(0)
               }
-            // playSound()
+            
             setTextCounter(0)
         }
     }
@@ -95,7 +98,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
             if (storyFile[currentFlow][storyPage].text != null) {
                 content = (
                     <ImageBackground style={styles.images} source={story[storyPage].bg}>
-                        <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
+                        <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(++saveScreen)}}/>
                         <View style={styles.textDecoration}>                               
                             <Text style={styles.text}>{storyFile[currentFlow][storyPage].text}</Text>
                             <TouchableOpacity>
@@ -112,7 +115,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
             } else {
                 content = (
                     <ImageBackground style={styles.images} source={story[storyPage].bg}>
-                        <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
+                        <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(++saveScreen)}}/>
                         <View style={styles.textDecoration}>  
                             
                             <TouchableOpacity>
@@ -127,13 +130,15 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
                     </ImageBackground> 
                 )
             }
-            // setSound(null)
+
         } else {
-            
+            if (sound === null && storyFile[currentFlow][storyPage].music != undefined) {
+                playSound()
+            }
             content = (<View style={styles.container} onCancel={onCancel}>
             
             <ImageBackground style={styles.images} source={story[storyPage].bg}>
-                <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(saveScreen++)}}/>
+                <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(++saveScreen)}}/>
                 <View style={styles.textDecoration} >
                     <Text  onPress={nextSlide} style={styles.text}>
                         {storyFile[currentFlow][storyPage].text[textCounter]}
