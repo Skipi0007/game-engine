@@ -28,6 +28,7 @@ export const story = [
         text: ['That shit was werewrivere'],
         bg: require('./imges/textBg2.jpg'),
         choices: [{name: 'Dont answer', key: 0}, {name: 'Bratan prosnis, ti obosralsya', key: 1} ],
+        music: require('./music/icons.mp3')
         
     }
     

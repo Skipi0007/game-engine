@@ -18,15 +18,16 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
 
     
 
-  async function playSound() {
+  async function playSound(flow, page) {
     console.log('Loading Sound');
     const { sound } = await Audio.Sound.createAsync(
-        storyFile[currentFlow][storyPage].music
+        storyFile[flow][page].music
     );
     setSound(sound);
 
-    console.log('Playing Sound', storyFile[currentFlow][storyPage].music);
+    console.log('Playing Sound', storyFile[flow][page].music);
     await sound.playAsync();
+    
     }
     
     
@@ -41,10 +42,18 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
 
   
         
-    const flowChanger = (flowNum) => {
+    const flowChanger = (flowNum, page, flow) => {
+
         startNewFlow()
-        setCurrentFlow(flowNum)
+        setCurrentFlow(flowNum)      
         
+        if (sound != null && storyFile[flow][page].music != storyFile[flowNum][0].music) {
+            sound.unloadAsync()
+        }
+        if (storyFile[currentFlow][storyPage].music != undefined &&
+             storyFile[flow][page].music != storyFile[flowNum][0].music) {
+            playSound(flowNum, 0)
+        }
     }
     
     const onCancel = () => {
@@ -55,11 +64,17 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
         if (storyFile[currentFlow][counter-1].music === undefined)
         {}       
         else {if ( storyFile[currentFlow][counter-1].music != storyFile[currentFlow][storyPage].music ) {
-                playSound()
+                playSound(currentFlow, storyPage)
             }
             else {}
         }
     }   
+
+    const checkUnloadSound = (counter) => {
+        if (sound != null && storyFile[currentFlow][counter+1].music != storyFile[currentFlow][storyPage].music) {
+            sound.unloadAsync()
+        } 
+    }
 
     const nextSlide = () => {
         if (Object.keys(storyFile[currentFlow][storyPage].text).length != 1 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length-1) {
@@ -68,9 +83,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
         } else {
             if (storyPage < Object.keys(storyFile[currentFlow]).length-1){ 
                 let counter=storyPage
-                if (sound != null && storyFile[currentFlow][counter+1].music != storyFile[currentFlow][storyPage].music) {
-                    sound.unloadAsync()
-                }    
+                checkUnloadSound(counter)   
                 changePage(++storyPage)
                 counter=storyPage
                 currentSoundCheck(counter)
@@ -104,7 +117,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
                             <Text style={styles.text}>{storyFile[currentFlow][storyPage].text}</Text>
                             <TouchableOpacity>
                                 {storyFile[currentFlow][storyPage].choices.map(item => (                               
-                                    <Text key={item.key} style={styles.flowButtons} onPress={() => flowChanger(item.key)}>{item.name}</Text> 
+                                    <Text key={item.key} style={styles.flowButtons} onPress={() => flowChanger(item.key, storyPage, currentFlow)}>{item.name}</Text> 
                                 ))}
                             </TouchableOpacity>
                         </View>
@@ -121,7 +134,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
                             
                             <TouchableOpacity>
                                 {storyFile[currentFlow][storyPage].choices.map(item => (                               
-                                    <Text key={item.key} style={styles.flowButtons} onPress={() => flowChanger(item.key)}>{item.name}</Text> 
+                                    <Text key={item.key} style={styles.flowButtons} onPress={() => flowChanger(item.key, storyPage, currentFlow)}>{item.name}</Text> 
                                 ))}
                             </TouchableOpacity> 
                         </View>
@@ -134,7 +147,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
 
         } else {
             if (sound === null && storyFile[currentFlow][storyPage].music != undefined) {
-                playSound()
+                playSound(currentFlow, storyPage)
             }
             content = (<View style={styles.container} onCancel={onCancel}>
             
