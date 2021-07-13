@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
         
     },
     text: {
-        paddingLeft: "2px",
-        paddingRight: "2px",
+        paddingLeft: "3px",
+        paddingRight: "3px",
         backgroundColor: 'grey',
         borderRadius: 2,
         color: 'white',
