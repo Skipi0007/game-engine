@@ -1,21 +1,84 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Text, View, Button, Alert } from 'react-native';
+import {GameScreen} from './src/GameScreen'
+import {MainMenu} from './src/MainMenu'
+import { story } from './src/story/story';
+import {flowOne} from './src/story/flowOne'
+import { SaveScreen } from './src/SaveScreen';
+import { Audio } from 'expo-av';
+
+
 
 export default function App() {
+  let [storyPage, changePage] = useState(0)
+  let [currentFlow, setCurrentFlow] = useState(0)
+  let [game, setGame] = useState(null)
+  let [saveStart, setSaveStart] = useState(null)
+  let [save, setSave] = useState([
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null},
+    {flowNum: null, screenNum:null}
+])
+
+  
+
+  let content = (
+    <MainMenu continueGame={continueGame} newGame={newGame}/>
+  )
+
+  const continueGame = () => {
+    setGame(++game)
+  }
+
+  const newGame = () => {
+    changePage(0)
+    setGame(++game)
+  } 
+
+  if (game != null) {
+    content = (
+      <View>
+        
+        <GameScreen changePage={changePage} currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} startNewFlow={() => {changePage(0)}} storyPage={storyPage} setGame={setGame} saveStarter={() => {setSaveStart(++saveStart)}}/>
+        
+                    
+        
+                
+      </View>
+    )
+  } else if (saveStart != null) {
+    content = (
+      
+        <SaveScreen save={save} setSave={setSave} game={game} changePage={changePage} currentFlow={currentFlow} setCurrentFlow={setCurrentFlow} setGame={setGame} onExit={() => {setSaveStart(null)}} storyPage={storyPage} />
+      
+    )
+  } 
+  
+  else {
+    content = (
+      
+      <MainMenu continueGame={continueGame} newGame={newGame} saveStarter={() => {setSaveStart(++saveStart)}}/>
+    )
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <View>{content}</View>
+      
+    
+    
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+      
+  }
+
+
+
+})
+
