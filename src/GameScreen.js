@@ -14,6 +14,8 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     let [storyFile, setStoryFile] = useState(
         [story, flowOne]
     )
+    let [stableText, setStableText] = useState('')
+    let [dinamicLetter, setDinamicLetter] = useState('')
     const [sound, setSound] = React.useState(null);
 
     
@@ -30,8 +32,6 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     
     }
     
-    
-
     React.useEffect(() => {
         return sound
           ? () => {
@@ -75,10 +75,43 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
             sound.unloadAsync()
         } 
     }
+    
+    const textEffect = () => {
+        let arr = storyFile[currentFlow][storyPage].text.toString().split('')
+        let n = 0
+        // console.log(storyFile[currentFlow][storyPage].text)
+        // console.log(typeof storyFile[currentFlow][storyPage].text)
+        console.log(arr)
+        while  (n < Object.keys(arr).length) {
+            console.log('insideFlow')
+            console.log(dinamicLetter+stableText)
+            console.log(dinamicLetter)
+            console.log(stableText)
+            if (dinamicLetter+stableText === '') {
+                setDinamicLetter(dinamicLetter = arr[n].toString())
+                console.log('1flow')
+            } else {
+                let i=n
+                setStableText(stableText=stableText+dinamicLetter)
+                setDinamicLetter(dinamicLetter='')
+                
+                setDinamicLetter(dinamicLetter=arr[n].toString())
+                console.log('2flow')
+
+            }
+            console.log('flow++')
+            ++n
+            
+        }
+       
+    }
 
     const nextSlide = () => {
+        setStableText('')
+        setDinamicLetter('')
         if (Object.keys(storyFile[currentFlow][storyPage].text).length != 1 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length-1) {
             setTextCounter(++textCounter)
+            textEffect()
             
         } else {
             if (storyPage < Object.keys(storyFile[currentFlow]).length-1){ 
@@ -87,6 +120,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
                 changePage(++storyPage)
                 counter=storyPage
                 currentSoundCheck(counter)
+                textEffect()
             }
             else {
                 setGame(null)
@@ -94,6 +128,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
               }
             
             setTextCounter(0)
+            textEffect()
         }
     }
     
@@ -114,7 +149,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
                         <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} 
                         setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(++saveScreen)}}/>
                         <View style={styles.textDecoration}>                               
-                            <Text style={styles.text}>{storyFile[currentFlow][storyPage].text}</Text>
+                            <Text style={styles.text}>{stableText+dinamicLetter}</Text>
                             <TouchableOpacity>
                                 {storyFile[currentFlow][storyPage].choices.map(item => (                               
                                     <Text key={item.key} style={styles.flowButtons} onPress={() => flowChanger(item.key, storyPage, currentFlow)}>{item.name}</Text> 
@@ -155,7 +190,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
                 <ModalMenu saveStarter={saveStarter} setVisiblity={setVisiblity} visiblity={visiblity} setGame={setGame} onCancel={onCancel} setSaveScreen={()=> {setSaveScreen(++saveScreen)}}/>
                 <View style={styles.textDecoration} >
                     <Text  onPress={nextSlide} style={styles.text}>
-                        {storyFile[currentFlow][storyPage].text[textCounter]}
+                        {stableText+dinamicLetter}
                     </Text>                    
                 </View>
             
