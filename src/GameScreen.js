@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {StyleSheet, View, Text, Button, TouchableOpacity, ImageBackground, Modal} from 'react-native'
+import {StyleSheet, View, Text, Button, TouchableOpacity, ImageBackground, Modal, Animated, delay} from 'react-native'
 import {story} from './story/story'
 import {flowOne} from './story/flowOne'
 import {ModalMenu} from './ModalMenu'
@@ -14,7 +14,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     let [storyFile, setStoryFile] = useState(
         [story, flowOne]
     )
-    let [stableText, setStableText] = useState('')
+    let [stableText, setStableText] = useState(storyFile[currentFlow][storyPage].text)
     let [dinamicLetter, setDinamicLetter] = useState('')
     const [sound, setSound] = React.useState(null);
 
@@ -79,36 +79,24 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     const textEffect = () => {
         let arr = storyFile[currentFlow][storyPage].text.toString().split('')
         let n = 0
-        // console.log(storyFile[currentFlow][storyPage].text)
-        // console.log(typeof storyFile[currentFlow][storyPage].text)
-        console.log(arr)
+        
         while  (n < Object.keys(arr).length) {
-            console.log('insideFlow')
-            console.log(dinamicLetter+stableText)
-            console.log(dinamicLetter)
-            console.log(stableText)
+
             if (dinamicLetter+stableText === '') {
                 setDinamicLetter(dinamicLetter = arr[n].toString())
-                console.log('1flow')
             } else {
-                let i=n
                 setStableText(stableText=stableText+dinamicLetter)
-                setDinamicLetter(dinamicLetter='')
-                
+                setDinamicLetter(dinamicLetter='')        
                 setDinamicLetter(dinamicLetter=arr[n].toString())
-                console.log('2flow')
-
             }
-            console.log('flow++')
-            ++n
-            
-        }
-       
+
+            ++n 
+        }      
     }
 
     const nextSlide = () => {
-        setStableText('')
-        setDinamicLetter('')
+        setStableText(stableText='')
+        setDinamicLetter(dinamicLetter='')
         if (Object.keys(storyFile[currentFlow][storyPage].text).length != 1 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length-1) {
             setTextCounter(++textCounter)
             textEffect()
