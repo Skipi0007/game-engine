@@ -16,18 +16,16 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     )
     let [stableText, setStableText] = useState(storyFile[currentFlow][storyPage].text)
     let [dinamicLetter, setDinamicLetter] = useState('')
+    let [textStatus, setTextStatus] = useState(0)
     const [sound, setSound] = React.useState(null);
 
-    
 
   async function playSound(flow, page) {
-    console.log('Loading Sound');
     const { sound } = await Audio.Sound.createAsync(
         storyFile[flow][page].music
     );
     setSound(sound);
 
-    console.log('Playing Sound', storyFile[flow][page].music);
     await sound.playAsync();
     
     }
@@ -35,7 +33,6 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     React.useEffect(() => {
         return sound
           ? () => {
-              console.log('Unloading Sound');
               sound.unloadAsync(); }
           : undefined;
       }, [sound]);
@@ -45,6 +42,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     const flowChanger = (flowNum, page, flow) => {
 
         startNewFlow()
+        
         setCurrentFlow(flowNum)      
         
         if (sound != null && storyFile[flow][page].music != storyFile[flowNum][0].music) {
@@ -56,7 +54,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
         }
         setStableText(stableText='')
         setDinamicLetter(dinamicLetter='')
-        textEffect()
+        textEffect(flowNum, 0)
     }
     
     const onCancel = () => {
@@ -79,74 +77,71 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
         } 
     }
     
-    // const textEffect = () => {
-    //     console.log('textEffect started')
-    //     let arr = storyFile[currentFlow][storyPage].text.toString().split('')
-    //     let n = 0
-        
-    //     while  (n < Object.keys(arr).length) {
-
-    //         if (dinamicLetter+stableText === '') {
-    //             setDinamicLetter(dinamicLetter = arr[n].toString())
-    //         } else {
-    //             setStableText(stableText=stableText+dinamicLetter)      
-    //             setDinamicLetter(dinamicLetter=arr[n].toString())
-    //         }
-    //         setTimeout(()=>{++n, console.log('timeout sterted')}, 3000)
-    //         console.log('timeoutEnded')
-    //     }      
-    // }
-    const textEffect = () => {
-        let arr = storyFile[currentFlow][storyPage].text.toString().split('')
-        console.log('start cycle')
+    const textEffect = (flowNum, page) => {
+        if (storyFile[flowNum][page].text != undefined) {
+        let arr = storyFile[flowNum][page].text.toString().split('')
         let n = 0
         while  (n < Object.keys(arr).length) {
             textAnimation(n, arr)
             ++n
-            console.log(n+' sybol loged')
         }
-        console.log('cycle complete n is '+n)
+        } else {
+            setTextStatus(0)
+        }
     }
 
     const textAnimation = (counter, array) => {
         if (counter === 0) {
-            console.log('1st symbol try to log')
-            setTimeout(()=>{setDinamicLetter(dinamicLetter = array[counter].toString())}, 10)
-            console.log('1st symbol to loged') 
-        }
-        else {
-            console.log('other symbol try to log')
+            setTimeout(()=>{setDinamicLetter(dinamicLetter = array[counter].toString())
+                console.log(Object.keys(array).length)}, 10)
+           
+        } else if(counter+1 === Object.keys(array).length){
             setTimeout(()=>{
             setStableText(stableText=stableText+dinamicLetter)      
             setDinamicLetter(dinamicLetter=array[counter].toString())
+            setTextStatus(0)
+            console.log('end of animation')
             }, counter*10)  
-            console.log('other symbol to loged') 
+             
+        } else {
+            setTimeout(()=>{
+            setStableText(stableText=stableText+dinamicLetter)      
+            setDinamicLetter(dinamicLetter=array[counter].toString())
+            }, counter*10) 
+            
         }
     }
 
     const nextSlide = () => {
-        setStableText(stableText='')
-        setDinamicLetter(dinamicLetter='')
-        if (Object.keys(storyFile[currentFlow][storyPage].text).length != 1 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length-1) {
-            setTextCounter(++textCounter)
-            textEffect()
+        if (textStatus === 0) {
+            setTextStatus(1)
+            console.log('text status = 1')
+            setStableText(stableText='')
+            setDinamicLetter(dinamicLetter='')
+            if (Object.keys(storyFile[currentFlow][storyPage].text).length != 1 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length-1) {
+                setTextCounter(++textCounter)
+                textEffect(currentFlow, storyPage)
             
-        } else {
-            if (storyPage < Object.keys(storyFile[currentFlow]).length-1){ 
-                let counter=storyPage
-                checkUnloadSound(counter)   
-                changePage(++storyPage)
-                counter=storyPage
-                currentSoundCheck(counter)
-                textEffect()
+            } else {
+                if (storyPage < Object.keys(storyFile[currentFlow]).length-1){ 
+                    let counter=storyPage
+                    checkUnloadSound(counter)   
+                    changePage(++storyPage)
+                    counter=storyPage
+                    currentSoundCheck(counter)
+                    textEffect(currentFlow, storyPage)
+                }
+                else {
+                    setGame(null)
+                    changePage(0)
+                }
             }
-            else {
-                setGame(null)
-                changePage(0)
-              }
+        } else {
+            // setStableText(stableText=storyFile[currentFlow][storyPage].text)
+            // setDinamicLetter('')
+            // setTextStatus(0)
+            console.log('empty flow')
             
-            setTextCounter(0)
-            // textEffect()
         }
     }
     
