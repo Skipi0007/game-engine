@@ -54,6 +54,9 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
              storyFile[flow][page].music != storyFile[flowNum][0].music) {
             playSound(flowNum, 0)
         }
+        setStableText(stableText='')
+        setDinamicLetter(dinamicLetter='')
+        textEffect()
     }
     
     const onCancel = () => {
@@ -76,22 +79,49 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
         } 
     }
     
+    // const textEffect = () => {
+    //     console.log('textEffect started')
+    //     let arr = storyFile[currentFlow][storyPage].text.toString().split('')
+    //     let n = 0
+        
+    //     while  (n < Object.keys(arr).length) {
+
+    //         if (dinamicLetter+stableText === '') {
+    //             setDinamicLetter(dinamicLetter = arr[n].toString())
+    //         } else {
+    //             setStableText(stableText=stableText+dinamicLetter)      
+    //             setDinamicLetter(dinamicLetter=arr[n].toString())
+    //         }
+    //         setTimeout(()=>{++n, console.log('timeout sterted')}, 3000)
+    //         console.log('timeoutEnded')
+    //     }      
+    // }
     const textEffect = () => {
         let arr = storyFile[currentFlow][storyPage].text.toString().split('')
+        console.log('start cycle')
         let n = 0
-        
         while  (n < Object.keys(arr).length) {
+            textAnimation(n, arr)
+            ++n
+            console.log(n+' sybol loged')
+        }
+        console.log('cycle complete n is '+n)
+    }
 
-            if (dinamicLetter+stableText === '') {
-                setDinamicLetter(dinamicLetter = arr[n].toString())
-            } else {
-                setStableText(stableText=stableText+dinamicLetter)
-                setDinamicLetter(dinamicLetter='')        
-                setDinamicLetter(dinamicLetter=arr[n].toString())
-            }
-
-            ++n 
-        }      
+    const textAnimation = (counter, array) => {
+        if (counter === 0) {
+            console.log('1st symbol try to log')
+            setTimeout(()=>{setDinamicLetter(dinamicLetter = array[counter].toString())}, 10)
+            console.log('1st symbol to loged') 
+        }
+        else {
+            console.log('other symbol try to log')
+            setTimeout(()=>{
+            setStableText(stableText=stableText+dinamicLetter)      
+            setDinamicLetter(dinamicLetter=array[counter].toString())
+            }, counter*10)  
+            console.log('other symbol to loged') 
+        }
     }
 
     const nextSlide = () => {
@@ -116,7 +146,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
               }
             
             setTextCounter(0)
-            textEffect()
+            // textEffect()
         }
     }
     
@@ -124,11 +154,13 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     
 
     let content
-
+        //saveScreen flow
         if (saveScreen != null) {
             setSound(null)
            content = (<SaveScreen onExit={()=> {setSaveScreen(null)}}/>)
         }
+
+        //flowChoice flow
         else if (storyFile[currentFlow][storyPage].choices != null) {
 
             if (storyFile[currentFlow][storyPage].text != null) {
@@ -169,6 +201,7 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
             }
 
         } else {
+            // app start screen
             if (sound === null && storyFile[currentFlow][storyPage].music != undefined) {
                 playSound(currentFlow, storyPage)
             }
