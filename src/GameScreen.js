@@ -1,3 +1,5 @@
+// TODO: удалить нахуй ебаный текст каунтер и все что с ним связано
+
 import React, {useState} from 'react'
 import {StyleSheet, View, Text, Button, TouchableOpacity, ImageBackground, Modal, Animated, delay} from 'react-native'
 import {story} from './story/story'
@@ -10,7 +12,6 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
 
     let [visiblity, setVisiblity] = useState(false)
     let [saveScreen, setSaveScreen] = useState(null)
-    let [textCounter, setTextCounter] = useState(0)
     let [storyFile, setStoryFile] = useState(
         [story, flowOne]
     )
@@ -92,8 +93,8 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
 
     const textAnimation = (counter, array) => {
         if (counter === 0) {
-            setTimeout(()=>{setDinamicLetter(dinamicLetter = array[counter].toString())
-                console.log(Object.keys(array).length)}, 10)
+            setDinamicLetter(dinamicLetter = array[counter].toString())
+                console.log(Object.keys(array).length)
            
         } else if(counter+1 === Object.keys(array).length){
             setTimeout(()=>{
@@ -118,11 +119,6 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
             console.log('text status = 1')
             setStableText(stableText='')
             setDinamicLetter(dinamicLetter='')
-            if (Object.keys(storyFile[currentFlow][storyPage].text).length != 1 && textCounter < Object.keys(storyFile[currentFlow][storyPage].text).length-1) {
-                setTextCounter(++textCounter)
-                textEffect(currentFlow, storyPage)
-            
-            } else {
                 if (storyPage < Object.keys(storyFile[currentFlow]).length-1){ 
                     let counter=storyPage
                     checkUnloadSound(counter)   
@@ -135,7 +131,6 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
                     setGame(null)
                     changePage(0)
                 }
-            }
         } else {
             // setStableText(stableText=storyFile[currentFlow][storyPage].text)
             // setDinamicLetter('')
