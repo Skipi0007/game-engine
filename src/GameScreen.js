@@ -1,4 +1,6 @@
-// TODO: удалить нахуй ебаный текст каунтер и все что с ним связано
+// TODO: добавить воспроизведение нескольких звуков
+// TODO: пофиксить мультитапы текста
+// TODO: добавить сохранения в файлах телефона
 
 import React, {useState} from 'react'
 import {StyleSheet, View, Text, Button, TouchableOpacity, ImageBackground, Modal, Animated, delay} from 'react-native'
