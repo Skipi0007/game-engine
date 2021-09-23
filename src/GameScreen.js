@@ -2,13 +2,13 @@
 // TODO: пофиксить мультитапы текста
 // TODO: добавить сохранения в файлах телефона
 
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {StyleSheet, View, Text, Button, TouchableOpacity, ImageBackground, Modal, Animated, delay} from 'react-native'
 import {story} from './story/story'
 import {flowOne} from './story/flowOne'
 import {ModalMenu} from './ModalMenu'
 import {SaveScreen} from './SaveScreen'
-import { Audio } from 'expo-av';
+import { Audio, AVPlaybackStatus } from 'expo-av';
 
 export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPage, changePage, setGame, saveStarter}) => {
 
@@ -20,19 +20,41 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     let [stableText, setStableText] = useState(storyFile[currentFlow][storyPage].text)
     let [dinamicLetter, setDinamicLetter] = useState('')
     let [textStatus, setTextStatus] = useState(0)
+    let [soundCounter, setSoundCounter] = useState(0)
     const [sound, setSound] = React.useState(null);
 
 
   async function playSound(flow, page) {
     const { sound } = await Audio.Sound.createAsync(
-        storyFile[flow][page].music
+        storyFile[flow][page].music[soundCounter], {
+            isLooping: true,
+            didJustFinish: false
+        }
     );
-    setSound(sound);
+    console.log(sound.isLooping)
 
+      
+    
+    // Audio.Sound.setOnPlaybackStatusUpdate = playbackStatus => {
+    //     if (playbackStatus.didJustFinish) {
+    //     console.log('done!')
+    //     }
+    // }
+    // console.log(AVPlaybackStatus.didJustFinish)
+
+    // Audio.Sound.setStatusAsync({ 
+    //     progressUpdateIntervalMillis: 500,
+    //     positionMillis: 0,
+    //     shouldPlay: false,
+    //     rate: 1.0,
+    //     shouldCorrectPitch: false,
+    //     volume: 1.0,
+    //     isMuted: false,
+    //     isLooping: true })
+   
+    setSound(sound);
     await sound.playAsync();
-    
     }
-    
     React.useEffect(() => {
         return sound
           ? () => {
@@ -40,7 +62,13 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
           : undefined;
       }, [sound]);
 
-  
+    //   useEffect(() => {
+    //     console.log('catch soundFinish')
+    //   // if (Object.keys(storyFile[currentFlow][storyPage].music).length !== 1 & Object.keys(storyFile[currentFlow][storyPage].music).length < soundCounter) {
+    //   //     setSoundCounter(++soundCounter)
+    //   //     playSound(currentFlow, storyPage)
+    //   // }
+    // }, [sound.didJustFinish])
         
     const flowChanger = (flowNum, page, flow) => {
 
@@ -96,14 +124,14 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     const textAnimation = (counter, array) => {
         if (counter === 0) {
             setDinamicLetter(dinamicLetter = array[counter].toString())
-                console.log(Object.keys(array).length)
+                // console.log(Object.keys(array).length)
            
         } else if(counter+1 === Object.keys(array).length){
             setTimeout(()=>{
             setStableText(stableText=stableText+dinamicLetter)      
             setDinamicLetter(dinamicLetter=array[counter].toString())
             setTextStatus(0)
-            console.log('end of animation')
+            // console.log('end of animation')
             }, counter*10)  
              
         } else {
@@ -116,9 +144,10 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
     }
 
     const nextSlide = () => {
+        // console.log(Audio.AVPlaybackStatus)
         if (textStatus === 0) {
             setTextStatus(1)
-            console.log('text status = 1')
+            // console.log('text status = 1')
             setStableText(stableText='')
             setDinamicLetter(dinamicLetter='')
                 if (storyPage < Object.keys(storyFile[currentFlow]).length-1){ 
@@ -128,10 +157,12 @@ export const GameScreen = ({ currentFlow, setCurrentFlow, startNewFlow, storyPag
                     counter=storyPage
                     currentSoundCheck(counter)
                     textEffect(currentFlow, storyPage)
+                    // console.log(Audio.AVPlaybackStatus)
                 }
                 else {
                     setGame(null)
                     changePage(0)
+                    // console.log(Audio.AVPlaybackStatus)
                 }
         } else {
             // setStableText(stableText=storyFile[currentFlow][storyPage].text)
