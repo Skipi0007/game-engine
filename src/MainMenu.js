@@ -5,15 +5,19 @@ import {StyleSheet, View, Text, Button, TouchableOpacity, ImageBackground} from 
 
 
 
-export const MainMenu = ({continueGame, newGame , saveStarter}) => {
+export const MainMenu = ({navigation, continueGame, newGame , saveStarter}) => {
     
+    const nav = (screenName) => {
+        navigation.navigate(screenName)
+    }
+
     return (
         <View>
             <ImageBackground style={styles.images} source={require('./story/imges/menuBg.jpg')}>
                 <View style={styles.buttosBlock}>
-                <Button  title="Continue" onPress = {continueGame}/>
-                <Button  title="New Game" onPress = {newGame} />
-                <Button  title="Load" onPress = {saveStarter}/>
+                <Button  title="Continue" onPress = {() => {nav(GameScreen)}}/>
+                <Button  title="New Game" onPress = {() => {nav(GameScreen)}} />
+                <Button  title="Load" onPress = {() => {nav(SaveScreen)}}/>
                 <Button  title="Settings"/>
                 </View>
             </ImageBackground>

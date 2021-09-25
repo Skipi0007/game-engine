@@ -7,6 +7,9 @@ import { story } from './src/story/story';
 import {flowOne} from './src/story/flowOne'
 import { SaveScreen } from './src/SaveScreen';
 import { Audio } from 'expo-av';
+import {AppNavigation} from './src/navigation/AppNavigation';
+// import {NavigationContainer } from '@react-navigation/native'
+// import {createNativeStackNavigator } from '@react-navigation/stack'
 
 
 
@@ -24,20 +27,24 @@ export default function App() {
     {flowNum: null, screenNum:null}
 ])
 
-  
+  // const Stack = createNativeStackNavigator();
 
-  let content = (
-    <MainMenu continueGame={continueGame} newGame={newGame}/>
-  )
+  // let content = (
+  //   <MainMenu continueGame={continueGame} newGame={newGame}/>
+  // )
 
-  const continueGame = () => {
-    setGame(++game)
+  // const continueGame = () => {
+  //   setGame(++game)
+  // }
+
+  // const newGame = () => {
+  //   changePage(0)
+  //   setGame(++game)
+  // } 
+
+  const nav = (navigation, screenName) => {
+
   }
-
-  const newGame = () => {
-    changePage(0)
-    setGame(++game)
-  } 
 
   if (game != null) {
     content = (
@@ -66,11 +73,12 @@ export default function App() {
   }
 
   return (
-    <View>{content}</View>
-      
-    
-    
-  );
+    <AppNavigation/>
+    )
+  // <AppNavigation el={content}/>
+  // (
+  //   <View>{content}</View>  
+  // );
 }
 
 const styles = StyleSheet.create({
